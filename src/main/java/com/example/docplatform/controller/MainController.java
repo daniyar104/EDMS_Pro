@@ -12,9 +12,9 @@ public class MainController {
     @GetMapping("/user")
     public String userAccess(Principal principal){
         if (principal == null){
-            return null;
+            return "Null";
         }else {
-            return principal.getName();
+            return "Hello, " + principal.getName();
         }
     }
 }
