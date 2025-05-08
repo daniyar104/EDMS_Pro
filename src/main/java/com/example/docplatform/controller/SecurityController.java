@@ -59,12 +59,12 @@ public class SecurityController {
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
         user.setRole(signUpRequest.getRole());
         user.setFirstName(signUpRequest.getFirstName());
-        user.setLast_Name(signUpRequest.getLast_Name());
+        user.setLastName(signUpRequest.getLast_Name());
         user.setMiddleName(signUpRequest.getMiddleName());
         user.setIin(signUpRequest.getIin());
-        user.setBirth_year(signUpRequest.getBirth_year());
+        user.setBirthYear(signUpRequest.getBirth_year());
         user.setPosition(signUpRequest.getPosition());
-        user.setIndividual_company_number(signUpRequest.getIndividual_company_number());
+        user.setIndividualCompanyNumber(signUpRequest.getIndividual_company_number());
 
         // Сохранение пользователя в базе данных
         userRepository.save(user);

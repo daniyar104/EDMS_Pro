@@ -29,12 +29,12 @@ public class UserDetailsImpl implements UserDetails {
                 user.getPassword(),
                 user.getRole(),
                 user.getFirstName(),
-                user.getLast_Name(),
+                user.getLastName(),
                 user.getMiddleName(),
                 user.getIin(),
-                user.getBirth_year(),
+                user.getBirthYear(),
                 user.getPosition(),
-                user.getIndividual_company_number());
+                user.getIndividualCompanyNumber());
     }
 
     @Override

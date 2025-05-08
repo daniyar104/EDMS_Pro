@@ -25,20 +25,25 @@ public class User {
     private String firstName;
 
     @Column(name = "last_name")
-    private String last_Name;
+    private String lastName;
 
     @Column
     private String middleName;
 
-    @Column
+    @Column(name = "iin")
     private String iin;
 
     @Column(name = "birth_year")
-    private String birth_year;
+    private String birthYear;
 
     @Column
     private String position;
 
     @Column(name = "individual_company_number")
-    private String individual_company_number;
+    private String individualCompanyNumber; // Внешний ключ, но без связи с объектом Company напрямую
+
+    // Связь с компанией через внешний ключ
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "individual_company_number", referencedColumnName = "companyCode", insertable = false, updatable = false)
+    private Company company; // Компания, к которой относится пользователь
 }
