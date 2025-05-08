@@ -4,29 +4,42 @@ import com.example.docplatform.model.User;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
 
-//@Service
 @AllArgsConstructor
 public class UserDetailsImpl implements UserDetails {
     private Long id;
-    private String username;
+    private String email;
     private String password;
     private String role;
+    private String firstName;
+    private String last_Name;
+    private String middleName;
+    private String iin;
+    private String birth_year;
+    private String position;
+    private String individual_company_number;
 
-    public static UserDetailsImpl build(User user){
+    public static UserDetailsImpl build(User user) {
         return new UserDetailsImpl(
                 user.getId(),
-                user.getUsername(),
+                user.getEmail(),
                 user.getPassword(),
-                user.getRole());
+                user.getRole(),
+                user.getFirstName(),
+                user.getLast_Name(),
+                user.getMiddleName(),
+                user.getIin(),
+                user.getBirth_year(),
+                user.getPosition(),
+                user.getIndividual_company_number());
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        // Вы можете добавить логику для возврата ролей или прав доступа, если необходимо
         return List.of();
     }
 
@@ -37,7 +50,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return email; // Теперь возвращаем email вместо username
     }
 
     @Override

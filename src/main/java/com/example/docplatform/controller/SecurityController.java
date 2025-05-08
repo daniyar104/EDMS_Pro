@@ -47,19 +47,32 @@ public class SecurityController {
     }
 
     @PostMapping("/signup")
-    ResponseEntity<?> signup(@RequestBody SingUpRequest singUpRequest){
-        if(userRepository.existsByUsername(singUpRequest.getUsername())){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Choice other username");
+    public ResponseEntity<?> signup(@RequestBody SingUpRequest signUpRequest) {
+        // Проверка на наличие пользователя с таким email
+        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email is already in use");
         }
 
+        // Создание нового пользователя
         User user = new User();
-        user.setUsername(singUpRequest.getUsername());
-        user.setPassword(passwordEncoder.encode(singUpRequest.getPassword()));
-        user.setRole(singUpRequest.getRole());
-        userRepository.save(user);
-        return ResponseEntity.ok("Success!");
+        user.setEmail(signUpRequest.getEmail());
+        user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
+        user.setRole(signUpRequest.getRole());
+        user.setFirstName(signUpRequest.getFirstName());
+        user.setLast_Name(signUpRequest.getLast_Name());
+        user.setMiddleName(signUpRequest.getMiddleName());
+        user.setIin(signUpRequest.getIin());
+        user.setBirth_year(signUpRequest.getBirth_year());
+        user.setPosition(signUpRequest.getPosition());
+        user.setIndividual_company_number(signUpRequest.getIndividual_company_number());
 
+        // Сохранение пользователя в базе данных
+        userRepository.save(user);
+        System.out.println(user);
+
+        return ResponseEntity.ok("Success!");
     }
+
 
 
     @PostMapping("/signin")

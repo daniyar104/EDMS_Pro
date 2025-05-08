@@ -29,7 +29,7 @@ public class TokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String jwt = null;
-        String username = null;
+        String email = null;
         UserDetails userDetails = null;
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = null;
         try{
@@ -39,12 +39,12 @@ public class TokenFilter extends OncePerRequestFilter {
             }
             if(jwt != null){
                 try{
-                    username = jwtCore.getNameFromJwt(jwt);
+                    email = jwtCore.getNameFromJwt(jwt);
                 }catch (Exception e){
 
                 }
-                if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
-                    userDetails = userDetailsService.loadUserByUsername(username);
+                if(email != null && SecurityContextHolder.getContext().getAuthentication() == null){
+                    userDetails = userDetailsService.loadUserByUsername(email);
                     usernamePasswordAuthenticationToken =
                             new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     usernamePasswordAuthenticationToken.setDetails(
