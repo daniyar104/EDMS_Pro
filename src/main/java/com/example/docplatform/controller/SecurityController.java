@@ -48,12 +48,10 @@ public class SecurityController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody SingUpRequest signUpRequest) {
-        // Проверка на наличие пользователя с таким email
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email is already in use");
         }
 
-        // Создание нового пользователя
         User user = new User();
         user.setEmail(signUpRequest.getEmail());
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));

@@ -11,10 +11,8 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    // Поиск пользователя по email
     Optional<User> findUserByEmail(String email);
 
-    // Проверка существования пользователя с таким email
     Boolean existsByEmail(String email);
 
     @Query("SELECT new com.example.docplatform.dto.company.UserWithCompanyDTO(" +
