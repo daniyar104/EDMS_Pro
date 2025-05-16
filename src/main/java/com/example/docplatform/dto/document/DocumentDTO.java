@@ -4,11 +4,46 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class DocumentDTO {
-    private Long id;
+    private String fileName;
     private String documentNumber;
+    private String fileType;
     private LocalDate documentDate;
-    private String uploadedByEmail;
+    private String documentType;
     private LocalDateTime uploadDate;
+    private String uploadedByEmail;
+    private String addressedToEmail;
+
+    public String getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String getDocumentType() {
+        return documentType;
+    }
+
+    public void setDocumentType(String documentType) {
+        this.documentType = documentType;
+    }
+
+    public String getAddressedToEmail() {
+        return addressedToEmail;
+    }
+
+    public void setAddressedToEmail(String addressedToEmail) {
+        this.addressedToEmail = addressedToEmail;
+    }
 
     public String getDocumentNumber() {
         return documentNumber;
@@ -34,13 +69,6 @@ public class DocumentDTO {
         this.uploadedByEmail = uploadedByEmail;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public LocalDateTime getUploadDate() {
         return uploadDate;

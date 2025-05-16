@@ -14,4 +14,5 @@ public class UserWithCompanyDTO {
     private String position;
     private String companyName;
     private String companyAddress;
+    private String companyCode;
 }

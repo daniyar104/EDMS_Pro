@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,5 +33,8 @@ public class UserService implements UserDetailsService {
     public UserWithCompanyDTO getUserWithCompanyInfo(String email) {
         Optional<UserWithCompanyDTO> userWithCompanyDTO = userRepository.findUserWithCompanyInfoByEmail(email);
         return userWithCompanyDTO.orElseThrow(() -> new RuntimeException("User or company not found"));
+    }
+    public List<User> getUsersByCompanyCode(String companyCode) {
+        return userRepository.findAllByIndividualCompanyNumber(companyCode);
     }
 }

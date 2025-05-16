@@ -74,12 +74,42 @@ public class DocumentService {
         // Преобразование в DTO, чтобы избежать проблем с ленивыми полями
         return documents.stream().map(document -> {
             DocumentDTO dto = new DocumentDTO();
-            dto.setId(document.getId());
+            dto.setFileName(document.getFileName());
             dto.setDocumentNumber(document.getDocumentNumber());
+            dto.setFileType(getFileExtension(document.getFileName()));
             dto.setDocumentDate(document.getDocumentDate());
-            dto.setUploadedByEmail(document.getUploadedBy().getEmail()); // Извлекаем только нужное
             dto.setUploadDate(document.getUploadDate());
+            dto.setUploadedByEmail(document.getUploadedBy().getEmail());
+            dto.setAddressedToEmail(
+                    document.getAddressedTo() != null ? document.getAddressedTo().getEmail() : null
+            );
+            dto.setDocumentType(document.getDocumentType().name());
             return dto;
         }).collect(Collectors.toList());
+
+    }
+
+    public List<DocumentDTO> getDocumentsByUploader(String uploaderEmail) {
+        List<Document> documents = documentRepository.findByUploadedByEmail(uploaderEmail);
+
+        return documents.stream().map(document -> {
+            DocumentDTO dto = new DocumentDTO();
+            dto.setFileName(document.getFileName());
+            dto.setFileType(getFileExtension(document.getFileName()));
+            dto.setDocumentNumber(document.getDocumentNumber());
+            dto.setDocumentDate(document.getDocumentDate());
+            dto.setUploadDate(document.getUploadDate());
+            dto.setUploadedByEmail(document.getUploadedBy().getEmail());
+            dto.setAddressedToEmail(
+                    document.getAddressedTo() != null ? document.getAddressedTo().getEmail() : null
+            );
+            dto.setDocumentType(document.getDocumentType().name());
+            return dto;
+        }).collect(Collectors.toList());
+    }
+
+    private String getFileExtension(String fileName) {
+        int dotIndex = fileName.lastIndexOf('.');
+        return (dotIndex != -1) ? fileName.substring(dotIndex + 1).toLowerCase() : "";
     }
 }

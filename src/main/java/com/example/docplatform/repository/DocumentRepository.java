@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface DocumentRepository extends JpaRepository<Document, Long> {
     List<Document> findByAddressedToEmail(String addressedToEmail);
+    List<Document> findByUploadedByEmail(String email);
+
 }
