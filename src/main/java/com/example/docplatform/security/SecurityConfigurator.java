@@ -58,7 +58,7 @@ public class SecurityConfigurator {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                                 .requestMatchers("/auth/**").permitAll()
-                                .requestMatchers("/secured/user").authenticated()
+//                                .requestMatchers("/secured/user").authenticated()
                                 .anyRequest().permitAll()
                 )
                 .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
