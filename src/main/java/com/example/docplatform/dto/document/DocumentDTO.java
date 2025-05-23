@@ -13,6 +13,16 @@ public class DocumentDTO {
     private String uploadedByEmail;
     private String addressedToEmail;
 
+    private String filePath;
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
     public String getFileType() {
         return fileType;
     }

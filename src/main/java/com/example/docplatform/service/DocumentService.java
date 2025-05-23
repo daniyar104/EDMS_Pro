@@ -112,4 +112,21 @@ public class DocumentService {
         int dotIndex = fileName.lastIndexOf('.');
         return (dotIndex != -1) ? fileName.substring(dotIndex + 1).toLowerCase() : "";
     }
+    public Document getDocumentByNumber(String documentNumber) {
+        return documentRepository.findByDocumentNumber(documentNumber)
+                .orElseThrow(() -> new RuntimeException("Документ не найден"));
+    }
+    public DocumentDTO toDTO(Document document) {
+        DocumentDTO dto = new DocumentDTO();
+        dto.setFileName(document.getFileName());
+        dto.setFileType(getFileExtension(document.getFileName()));
+        dto.setDocumentNumber(document.getDocumentNumber());
+        dto.setDocumentDate(document.getDocumentDate());
+        dto.setUploadDate(document.getUploadDate());
+        dto.setUploadedByEmail(document.getUploadedBy().getEmail());
+        dto.setAddressedToEmail(document.getAddressedTo() != null ? document.getAddressedTo().getEmail() : null);
+        dto.setDocumentType(document.getDocumentType().name());
+        dto.setFilePath(document.getFilePath());
+        return dto;
+    }
 }

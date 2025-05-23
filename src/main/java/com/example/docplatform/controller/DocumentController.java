@@ -51,6 +51,13 @@ public class DocumentController {
         List<DocumentDTO> documents = documentService.getDocumentsByUploader(email);
         return ResponseEntity.ok(documents);
     }
+    @GetMapping("/{documentNumber}")
+    public ResponseEntity<DocumentDTO> getDocumentByNumber(@PathVariable String documentNumber) {
+        Document document = documentService.getDocumentByNumber(documentNumber);
+        DocumentDTO dto = documentService.toDTO(document);
+        return ResponseEntity.ok(dto);
+    }
+
 
 
 

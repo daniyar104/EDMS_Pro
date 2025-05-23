@@ -6,11 +6,15 @@ import com.example.docplatform.model.*;
 import com.example.docplatform.repository.MemoRepository;
 import com.example.docplatform.repository.UserRepository;
 import com.example.docplatform.service.MemoService;
+import org.springframework.core.io.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.core.io.UrlResource;
+
 
 import java.nio.file.*;
 import java.time.LocalDateTime;
@@ -51,6 +55,29 @@ public class MemoController {
         memoRepository.save(memo);
         return ResponseEntity.ok("Memo created");
     }
+
+    @GetMapping("/{id}/pdf")
+    public ResponseEntity<Resource> downloadMemoPdf(@PathVariable Long id) throws Exception {
+        Memo memo = memoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Memo not found"));
+
+        if (memo.getPdfPath() == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        Path path = Paths.get(memo.getPdfPath());
+        if (!Files.exists(path)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        Resource file = new UrlResource(path.toUri());
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=" + path.getFileName())
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(file);
+    }
+
 
 
     @PostMapping("/{id}/approve")
@@ -97,6 +124,13 @@ public class MemoController {
 
         List<Memo> memos = memoRepository.findByApprover(approver);
         return ResponseEntity.ok(memos);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Memo> getMemoById(@PathVariable Long id) {
+        Memo memo = memoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Memo not found"));
+        return ResponseEntity.ok(memo);
     }
 
 }
