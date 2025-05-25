@@ -12,8 +12,18 @@ public class DocumentDTO {
     private LocalDateTime uploadDate;
     private String uploadedByEmail;
     private String addressedToEmail;
+    private String status;
 
     private String filePath;
+
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public String getFilePath() {
         return filePath;

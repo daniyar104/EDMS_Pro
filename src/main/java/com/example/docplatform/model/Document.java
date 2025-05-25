@@ -1,6 +1,7 @@
 package com.example.docplatform.model;
 
 import com.example.docplatform.enums.DocumentType;
+import com.example.docplatform.enums.DocumentStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -35,6 +36,10 @@ public class Document {
     @Column(name = "document_type", length = 50)
     private DocumentType documentType;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private DocumentStatus status;
+
     @Column(name = "upload_date")
     private LocalDateTime uploadDate;
 
@@ -45,4 +50,5 @@ public class Document {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "addressed_to_id")
     private User addressedTo;
+
 }

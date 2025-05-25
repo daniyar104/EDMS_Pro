@@ -1,6 +1,7 @@
 package com.example.docplatform.service;
 
 import com.example.docplatform.dto.document.DocumentDTO;
+import com.example.docplatform.enums.DocumentStatus;
 import com.example.docplatform.enums.DocumentType;
 import com.example.docplatform.model.Document;
 import com.example.docplatform.model.User;
@@ -63,6 +64,9 @@ public class DocumentService {
                 .uploadDate(LocalDateTime.now())
                 .uploadedBy(uploadedBy)
                 .addressedTo(addressedTo)
+                .status(DocumentStatus.SENT)
+
+
                 .build();
 
         return documentRepository.save(document);
@@ -84,6 +88,7 @@ public class DocumentService {
                     document.getAddressedTo() != null ? document.getAddressedTo().getEmail() : null
             );
             dto.setDocumentType(document.getDocumentType().name());
+            dto.setStatus(document.getStatus().name());
             return dto;
         }).collect(Collectors.toList());
 
@@ -104,6 +109,7 @@ public class DocumentService {
                     document.getAddressedTo() != null ? document.getAddressedTo().getEmail() : null
             );
             dto.setDocumentType(document.getDocumentType().name());
+            dto.setStatus(document.getStatus().name());
             return dto;
         }).collect(Collectors.toList());
     }
@@ -127,6 +133,22 @@ public class DocumentService {
         dto.setAddressedToEmail(document.getAddressedTo() != null ? document.getAddressedTo().getEmail() : null);
         dto.setDocumentType(document.getDocumentType().name());
         dto.setFilePath(document.getFilePath());
+        dto.setStatus(document.getStatus().name());
         return dto;
     }
+
+    public void save(Document doc) {
+        documentRepository.save(doc);
+    }
+
+    public void replaceFile(Document doc, MultipartFile newFile) throws IOException {
+        String newPath = uploadDir + System.currentTimeMillis() + "_" + newFile.getOriginalFilename();
+        Path path = Paths.get(newPath);
+        Files.createDirectories(path.getParent());
+        Files.write(path, newFile.getBytes());
+
+        doc.setFileName(newFile.getOriginalFilename());
+        doc.setFilePath(newPath);
+    }
+
 }
