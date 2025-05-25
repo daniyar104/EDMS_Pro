@@ -3,8 +3,9 @@ package com.example.docplatform.model;
 import com.example.docplatform.enums.MemoStatus;
 import jakarta.persistence.*;
 import lombok.Data;
-
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -31,8 +32,20 @@ public class Memo {
     @Enumerated(EnumType.STRING)
     private MemoStatus status;
 
+    @OneToMany(mappedBy = "memo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MemoAttachment> attachments = new ArrayList<>();
+
     @Column(name ="pdf_path")
     private String pdfPath;
+
+
+    public List<MemoAttachment> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<MemoAttachment> attachments) {
+        this.attachments = attachments;
+    }
 
     public Long getId() {
         return id;

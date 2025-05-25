@@ -10,4 +10,5 @@ public interface MemoRepository extends JpaRepository<Memo, Long> {
     List<Memo> findByAuthorOrApprover(User author, User approver);
     List<Memo> findByApprover(User approver);
 
+    List<Memo> findTop3ByAuthorOrderByCreatedAtDesc(User author);
 }
