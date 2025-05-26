@@ -7,10 +7,13 @@ import com.example.docplatform.repository.MemoAttachmentRepository;
 import com.example.docplatform.repository.MemoRepository;
 import com.example.docplatform.repository.UserRepository;
 import com.example.docplatform.service.MemoService;
+import com.example.docplatform.webSoket.MemoNotificationDTO;
 import org.springframework.core.io.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.*;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +45,9 @@ public class MemoController {
     @Autowired
     private MemoAttachmentRepository attachmentRepository;
 
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+
     @PostMapping
     public ResponseEntity<?> createMemo(
             @RequestBody MemoRequest dto,
@@ -62,6 +68,17 @@ public class MemoController {
         memo.setStatus(MemoStatus.SENT);
 
         memoRepository.save(memo);
+
+
+        MemoNotificationDTO notificationDTO = new MemoNotificationDTO(
+                memo.getId(),
+                memo.getContent(),
+                author.getEmail(),
+                approver.getEmail(),
+                memo.getCreatedAt().toString()
+        );
+
+        messagingTemplate.convertAndSend("/topic/memos/" + approver.getEmail(), notificationDTO);
         return ResponseEntity.ok(memo.getId());
     }
 
@@ -260,6 +277,29 @@ public class MemoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    @PostMapping("/{id}/reject")
+    public ResponseEntity<?> rejectMemo(
+            @PathVariable Long id,
+            @RequestHeader("X-User-Email") String email
+    ) {
+        User approver = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Memo memo = memoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Memo not found"));
+
+        if (!memo.getApprover().getId().equals(approver.getId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Недостаточно прав для отклонения");
+        }
+
+        memo.setStatus(MemoStatus.REJECTED);
+        memo.setApprovedAt(LocalDateTime.now());
+        memoRepository.save(memo);
+
+        return ResponseEntity.ok("Записка отклонена");
+    }
+
 
 
 }
